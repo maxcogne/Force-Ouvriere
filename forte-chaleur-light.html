@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forte Chaleur — Droits des salariés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #009cda;
+      --teal:    #2aaf92;
+      --red:     #ee343e;
+      --bg:      #f7f3ee;
+      --surface: #ede8e1;
+      --card:    #ffffff;
+      --border:  #ddd7ce;
+      --text:    #2e3a42;
+      --muted:   #7a8a94;
+      --white:   #1a252c;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SCROLL TEMP BAR (signature element) ── */
+    #temp-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      z-index: 1000;
+      background: linear-gradient(to right, var(--blue), #00c8a0, #ff8c00, var(--red));
+      background-size: 100vw 3px;
+      background-attachment: fixed;
+      transition: width 0.1s linear;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 3px; left: 0; right: 0;
+      z-index: 999;
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(247, 243, 238, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,190,178,0.7);
+    }
+    .nav__brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .nav__dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 8px var(--red);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(0.8); }
+    }
+    .nav__meta {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav__meta span { color: var(--teal); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: flex-end;
+      padding: clamp(2rem, 5vw, 4rem);
+      padding-top: 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* grid lines background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,156,218,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,156,218,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    }
+
+    /* large temperature readout */
+    .hero__temp {
+      position: absolute;
+      right: clamp(1rem, 5vw, 5rem);
+      bottom: clamp(2rem, 6vw, 4rem);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(8rem, 22vw, 20rem);
+      font-weight: 700;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(238,52,62,0.10);
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: -0.04em;
+    }
+
+    .hero__content { position: relative; z-index: 1; max-width: 780px; }
+
+    .hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 1.5rem;
+    }
+    .hero__tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .hero__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .hero__title .accent { color: var(--red); }
+
+    .hero__desc {
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero__stats {
+      display: flex;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      flex-wrap: wrap;
+    }
+    .stat { border-left: 1px solid var(--border); padding-left: 1.2rem; }
+    .stat__value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--white);
+      display: block;
+    }
+    .stat__label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SHARED ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section {
+      padding: clamp(4rem, 8vw, 7rem) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section__eyebrow {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section__eyebrow--blue { color: var(--blue); }
+    .section__eyebrow--teal { color: var(--teal); }
+    .section__eyebrow--red  { color: var(--red); }
+
+    .section__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .section__sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    /* ── MODULE CARDS (health section) ── */
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .module {
+      background: var(--card);
+      padding: 1.6rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .module::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px;
+      height: 0;
+      background: var(--teal);
+      transition: height 0.3s ease;
+    }
+    .module:hover { background: #f0ebe3; }
+    .module:hover::after { height: 100%; }
+    .module__icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .module__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .module__body {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── ORGANISATION (checklist) ── */
+    .section-org {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+    @media (max-width: 680px) { .section-org { grid-template-columns: 1fr; } }
+
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .checklist__item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .checklist__item:last-child { border-bottom: none; }
+    .checklist__check {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      border-radius: 4px;
+      background: rgba(42,175,146,0.12);
+      border: 1px solid var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 3px;
+    }
+    .checklist__check svg { width: 10px; height: 10px; }
+    .checklist__text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .checklist__text strong { color: var(--white); font-weight: 500; }
+
+    .org__highlight {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .org__highlight::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(42,175,146,0.05), transparent);
+      pointer-events: none;
+    }
+    .org__highlight-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.75rem;
+    }
+    .org__highlight-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .org__highlight-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── ALERT LEVELS ── */
+    .alert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    @media (max-width: 600px) { .alert-grid { grid-template-columns: 1fr; } }
+
+    .alert-cell {
+      background: var(--card);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .alert-cell::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .alert-cell--j::before { background: #f5a623; }
+    .alert-cell--o::before { background: #ff6b1a; }
+    .alert-cell--r::before { background: var(--red); }
+
+    .alert-cell__level {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .alert-cell__level::before {
+      content: '';
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .alert-cell--j .alert-cell__level { color: #f5a623; }
+    .alert-cell--j .alert-cell__level::before { background: #f5a623; box-shadow: 0 0 6px #f5a623; }
+    .alert-cell--o .alert-cell__level { color: #ff6b1a; }
+    .alert-cell--o .alert-cell__level::before { background: #ff6b1a; box-shadow: 0 0 6px #ff6b1a; }
+    .alert-cell--r .alert-cell__level { color: var(--red); }
+    .alert-cell--r .alert-cell__level::before { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+    .alert-cell__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .alert-cell__desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONTEXT ── */
+    .context-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: clamp(1.75rem, 4vw, 3rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      position: relative;
+      overflow: hidden;
+    }
+    .context-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 100% 0%, rgba(0,156,218,0.05), transparent);
+      pointer-events: none;
+    }
+    @media (max-width: 640px) { .context-panel { grid-template-columns: 1fr; } }
+
+    .context-block__label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.6rem;
+    }
+    .context-block__body {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .context-block__body strong { color: var(--white); font-weight: 500; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: clamp(2rem, 4vw, 3rem) 0;
+      border-top: 1px solid var(--border);
+    }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer__left {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .footer__left strong { color: var(--text); }
+    .footer__right {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      #temp-bar { transition: none; }
+      .nav__dot { animation: none; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0.8rem 1.25rem; }
+      .nav__meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll temperature bar -->
+  <div id="temp-bar" role="presentation" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav__brand">
+      <span class="nav__dot"></span>
+      FO Énergie GRDF
+    </div>
+    <div class="nav__meta">En vigueur : <span>01.07.2025</span></div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__temp" aria-hidden="true">42°</div>
+    <div class="container">
+      <div class="hero__content">
+        <div class="hero__tag">Décret — Journal officiel 01.06.2025</div>
+        <h1 class="hero__title">Forte<br><span class="accent">chaleur</span></h1>
+        <p class="hero__desc">Vos droits et les obligations de votre employeur face aux épisodes de chaleur extrême. Un cadre légal renforcé, des mesures concrètes.</p>
+        <div class="hero__stats">
+          <div class="stat">
+            <span class="stat__value">3 L</span>
+            <span class="stat__label">Eau / jour garantis</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value">3</span>
+            <span class="stat__label">Niveaux d'alerte</span>
+          </div>
+          <div class="stat">
+            <span class="stat__value">100%</span>
+            <span class="stat__label">Employeurs concernés</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1 : Santé -->
+  <section class="section">
+    <div class="container">
+      <p class="section__eyebrow section__eyebrow--teal reveal">Protection physique</p>
+      <h2 class="section__title reveal reveal-d1">Votre santé avant tout</h2>
+      <p class="section__sub reveal reveal-d2">L'employeur doit déployer ces mesures dès qu'une alerte météorologique est déclenchée. Elles ne sont pas optionnelles.</p>
+
+      <div class="modules reveal reveal-d3">
+        <div class="module">
+          <span class="module__icon">❄️</span>
+          <div class="module__title">Espace rafraîchi</div>
+          <div class="module__body">Climatisation, brumisateurs ou zones ombragées. Le poste de travail doit offrir une alternative à l'exposition directe à la chaleur.</div>
+        </div>
+        <div class="module">
+          <span class="module__icon">💧</span>
+          <div class="module__title">3 litres d'eau / jour</div>
+          <div class="module__body">En l'absence d'eau courante sur site, l'employeur est tenu de fournir au minimum 3 litres d'eau fraîche par personne et par jour.</div>
+        </div>
+        <div class="module">
+          <span class="module__icon">📋</span>
+          <div class="module__title">Information obligatoire</div>
+          <div class="module__body">Chaque salarié doit être informé des gestes à adopter en cas de coup de chaleur : symptômes, premiers secours, protocole d'urgence.</div>
+        </div>
+        <div class="module">
+          <span class="module__icon">🫶</span>
+          <div class="module__title">Personnes vulnérables</div>
+          <div class="module__body">Surveillance renforcée pour les salariés âgés, en état de santé fragile ou enceintes. Aménagements prioritaires obligatoires.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2 : Organisation -->
+  <section class="section">
+    <div class="container">
+      <p class="section__eyebrow section__eyebrow--blue reveal">Conditions de travail</p>
+      <h2 class="section__title reveal reveal-d1">Organisation adaptée</h2>
+      <p class="section__sub reveal reveal-d2">En période de canicule, l'employeur ne peut pas maintenir l'organisation habituelle. Trois ajustements sont imposés par la loi.</p>
+
+      <div class="section-org">
+        <ul class="checklist">
+          <li class="checklist__item reveal reveal-d1">
+            <div class="checklist__check">
+              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#2aaf92" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="checklist__text"><strong>Horaires modifiés</strong> — La modification des horaires de travail est obligatoire pour les salariés exposés en période de canicule déclarée.</p>
+          </li>
+          <li class="checklist__item reveal reveal-d2">
+            <div class="checklist__check">
+              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#2aaf92" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="checklist__text"><strong>Postes aménagés</strong> — L'exposition directe doit être réduite via rotation des postes, écrans de protection ou déplacement des activités.</p>
+          </li>
+          <li class="checklist__item reveal reveal-d3">
+            <div class="checklist__check">
+              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#2aaf92" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="checklist__text"><strong>Pauses supplémentaires</strong> — Des temps de repos additionnels s'imposent, au-delà des pauses contractuelles habituelles.</p>
+          </li>
+        </ul>
+
+        <div class="org__highlight reveal reveal-d2">
+          <div class="org__highlight-label">À retenir</div>
+          <div class="org__highlight-text">La productivité ne prime pas sur la sécurité.</div>
+          <div class="org__highlight-sub">Ces mesures sont des obligations légales, non des recommandations. En cas de refus de l'employeur, le salarié peut saisir l'inspection du travail ou exercer son droit de retrait si le danger est imminent.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3 : Alertes -->
+  <section class="section">
+    <div class="container">
+      <p class="section__eyebrow section__eyebrow--red reveal">Système d'alerte Météo-France</p>
+      <h2 class="section__title reveal reveal-d1">Trois niveaux, un plan d'action</h2>
+      <p class="section__sub reveal reveal-d2">Dès qu'une alerte est émise, l'employeur est tenu d'activer ses procédures. Il ne peut pas attendre le niveau suivant.</p>
+
+      <div class="alert-grid reveal reveal-d3">
+        <div class="alert-cell alert-cell--j">
+          <div class="alert-cell__level">Vigilance jaune</div>
+          <div class="alert-cell__title">Premières mesures</div>
+          <div class="alert-cell__desc">Information des salariés, vérification de l'accès à l'eau, activation des espaces rafraîchis disponibles. Surveillance accrue des vulnérables.</div>
+        </div>
+        <div class="alert-cell alert-cell--o">
+          <div class="alert-cell__level">Alerte orange</div>
+          <div class="alert-cell__title">Plan d'action complet</div>
+          <div class="alert-cell__desc">Modification obligatoire des horaires, pauses renforcées, aménagement des postes. Toutes les procédures de protection entrent en vigueur.</div>
+        </div>
+        <div class="alert-cell alert-cell--r">
+          <div class="alert-cell__level">Danger rouge</div>
+          <div class="alert-cell__title">Niveau maximal</div>
+          <div class="alert-cell__desc">Protection maximale obligatoire. Le droit de retrait peut s'appliquer si les conditions mettent la vie en danger. Responsabilité directe de l'employeur engagée.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4 : Contexte légal -->
+  <section class="section">
+    <div class="container">
+      <p class="section__eyebrow section__eyebrow--blue reveal">Cadre réglementaire</p>
+      <h2 class="section__title reveal reveal-d1">Un risque enfin reconnu par la loi</h2>
+      <p class="section__sub reveal reveal-d2">Ce décret marque un tournant dans la protection des travailleurs face au changement climatique.</p>
+
+      <div class="context-panel reveal reveal-d3">
+        <div class="context-block">
+          <div class="context-block__label">Contexte & entrée en vigueur</div>
+          <div class="context-block__body">
+            Publié au <strong>Journal officiel le 1er juin 2025</strong>, ce décret est entré en vigueur le <strong>1er juillet 2025</strong>. Il s'inscrit dans la lutte contre les risques professionnels accentués par le changement climatique et vise à mieux anticiper les épisodes caniculaires via une action préventive et structurée.
+          </div>
+        </div>
+        <div class="context-block">
+          <div class="context-block__label">Ce qui change fondamentalement</div>
+          <div class="context-block__body">
+            La chaleur est désormais reconnue comme un <strong>risque professionnel majeur</strong>, au même titre que le bruit ou les produits chimiques. Cette reconnaissance ouvre des droits concrets et crée des obligations mesurables pour l'employeur — avec des sanctions en cas de non-respect.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer__left">
+        <strong>FO Énergie GRDF</strong> · Document d'information syndicale · Juin 2025
+      </div>
+      <div class="footer__right">
+        Source : Journal officiel du 1<sup>er</sup> juin 2025
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll temperature bar
+    const bar = document.getElementById('temp-bar');
+    function updateBar() {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = total > 0 ? (scrolled / total) * 100 : 0;
+      bar.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', updateBar, { passive: true });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
